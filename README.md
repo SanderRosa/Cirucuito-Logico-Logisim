@@ -22,8 +22,8 @@ O circuito lê dados binários salvos de forma estática em bancos de memória, 
 ### Arquitetura de Componentes
 1. **Contador Binário (CONTADOR CTR DIV0x9):** Funciona como gerador sequencial de endereços, fornecendo a indexação binária contínua que dita o fluxo do programa.
 2. **Memórias ROM (Módulos ROSA, LIMA, VICENTE, SALERNO):** Memórias estáticas não voláteis pré-programadas. Cada partição armazena a codificação hexadecimal/binária para projetar caracteres alfanuméricos específicos associados.
-3. **Multiplexador (MUX):** Atua como uma chave seletora digital rápida de dados. O MUX escolhe de qual barramento de memória ROM a informação deve ser extraída com base em chaves e sinais seletores de controle.
-4. **Registradores / Flip-Flops (R0 a R4):** Memória interna temporária de curtíssimo prazo e alta velocidade que captura e estabiliza os barramentos de bits na borda ativa do pulso de Clock elétrico (CLK).
+3. **Multiplexador (MUX):** Atua como uma chave seletora digital rápida de dados ($N \to 1$). O MUX escolhe de qual barramento de memória ROM a informação deve ser extraída com base em chaves e sinais seletores de controle, evitando conflitos de barramento.
+4. **Registradores / Flip-Flops (R0 a R4):** Memórias internas temporárias síncronas e voláteis de altíssima velocidade que capturam e estabilizam os barramentos de bits na borda ativa do pulso de Clock elétrico (CLK).
 5. **Decodificadores e Displays de 7 Segmentos:** Unidades de exibição física que convertem dados digitais brutos em sinais elétricos discretos que iluminam os segmentos adequados para legibilidade humana.
 
 ---
@@ -66,14 +66,3 @@ Abaixo está o diagrama esquemático completo da arquitetura criada no Logisim:
    - `File > Open > TRABALHO.circ`
 4. Habilite a oscilação automática do Clock elétrico para simular em tempo real:
    - `Simulate > Auto-Tick Enabled`
-
----
-
-## 💡 Roteiro de Perguntas para Entrevistas (Conceitos Avançados)
-
-* **P: Qual a diferença prática e arquitetural entre as memórias ROM e os Registradores (Flip-Flops) criados nesse circuito?**
-  * **R:** A **ROM** (Read-Only Memory) é uma memória estática, não-volátil e de leitura que guarda a tabela de dados permanentemente programada — mesmo sem fornecimento elétrico os dados persistem. Os **Registradores** (baseados em Flip-Flops tipo D ou JK) são memórias de processamento de altíssima velocidade, voláteis, síncronas e que reagem dinamicamente a cada flanco (subida ou descida) do sinal de clock para registrar estados mutáveis instantaneamente.
-* **P: Qual o papel de controle do Multiplexador (MUX) nesse barramento de dados?**
-  * **R:** O MUX opera como um seletor de dados dinâmico de múltiplas entradas para uma única saída ($N \to 1$). Através de seus pinos de seleção, ele decide qual barramento de memória (entre ROSA, LIMA, VICENTE ou SALERNO) será conectado fisicamente à linha de saída dos decodificadores, evitando que múltiplos barramentos tentem escrever na mesma linha física ao mesmo tempo (o que causaria curto-circuito lógico / conflito de barramento).
-* **P: Qual foi o maior obstáculo no desenvolvimento de lógica digital integrada?**
-  * **R:** Sincronização temporal de Clock (*Timing Analysis*). Garantir que a propagação de sinal passe por todas as portas lógicas e multiplexadores antes que ocorra a próxima borda ativa de clock. Se o clock oscilar rápido demais ou houver caminhos muito longos de atraso, o circuito registrará valores inválidos ou parciais (*glitches*).
